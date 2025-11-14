@@ -1,0 +1,46 @@
+excel:
+  workbook_path: InputDélais.xlsm
+  sheet_name: "Sous-ensemble"
+  columns:
+    product_code: "Composants"
+    moq: "MOQ"
+    lot_size: "Lot"
+    currency: "Devise"
+  tiers:
+    # Formes attendues: "CU pour 200", "CU pour 1000", "CU pour 5000", ...
+    production_unit_cost_pattern: '(?i)^\s*CU\s*pour\s*(\d+)\s*$'
+    # Exemples: "CTA pour 1000", "CTA pour 5000"
+    air_transport_unit_cost_pattern: '(?i)^\s*CTA\s*pour\s*(\d+)\s*$'
+    # Exemples: "CTB pour 1000", "CTB pour 5000"
+    sea_transport_unit_cost_pattern: '(?i)^\s*CTB\s*pour\s*(\d+)\s*$'
+    # Temps de production par palier: "Temps de prod pour 200", "Temps de prod pour 1000", etc.
+    production_time_pattern: '(?i)Temps\s*de\s*prod\s*pour\s*(\d+)'
+    # Délais de transport (une seule colonne par mode, pas par palier)
+    air_transport_time_column: "Délais de transport Avion"
+    sea_transport_time_column: "Délais de transport Bateau"
+
+# Declare component dependencies by exact names as they appear in the Excel column 'Composants'
+dependencies:
+  Ballon:
+    - Handle
+  Assemblage et intégration final:
+    - POD
+    - Meca-elec
+    - Ballon
+    - Pack
+    - PCB et câblage
+    - Handle
+
+# Optional: assembly settings (reads duration from Excel if provided)
+assembly:
+  component_name: "Assemblage et intégration final"
+  duration_weeks: 8
+  duration_weeks_column: ""  # ex: "Durée Assemblage (semaines)" si présent dans Excel
+
+pricing:
+  handling_flat: 0
+  handling_percent: 0
+
+ui:
+  default_currency: "EUR"
+
